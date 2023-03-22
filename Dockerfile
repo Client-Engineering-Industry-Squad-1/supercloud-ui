@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-16:1-72 as builder
+FROM registry.access.redhat.com/ubi8/nodejs-16:1-90 as builder
 
 USER root
 
@@ -13,7 +13,7 @@ COPY --chown=default:root . .
 RUN npm install && \
     npm run build
 
-FROM registry.access.redhat.com/ubi8/nodejs-16-minimal:1-79
+FROM registry.access.redhat.com/ubi8/nodejs-16-minimal:1-98
 
 USER 1001
 
@@ -24,7 +24,9 @@ COPY --chown=1001:0 package.json package-lock.json ./
 COPY --chown=1001:0 server ./server
 
 RUN chmod -R g+w ./dist && \
-    npm install --production
+    npm i -g yarn && \
+    yarn install --production && \
+    yarn cache clean
 
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0 PORT=3000
