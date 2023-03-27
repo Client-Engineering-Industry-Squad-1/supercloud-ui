@@ -22,6 +22,7 @@ WORKDIR /opt/app-root/src
 COPY --from=builder --chown=1001:0 /opt/app-root/src/dist ./dist
 COPY --chown=1001:0 package.json package-lock.json ./
 COPY --chown=1001:0 server ./server
+COPY --chown=1001:0 config ./config
 
 RUN chmod -R g+w ./dist && \
     npm i -g yarn && \
