@@ -19,7 +19,7 @@ class OverView extends Component {
                 <Row className="compliance-page__row">
                     <Column lg={{span: 12}}>
                         <h2 style={{ margin: "30px 0" }} >
-                           TechZone Deployer
+                           Super Cloud Deployer
                         </h2>
 
                         <p style={{ lineHeight: "20px" }}>

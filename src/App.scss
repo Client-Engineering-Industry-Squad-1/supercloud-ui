@@ -24,7 +24,7 @@
 @import './ui-patterns/index';
 
 .App {
-  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Gotham Book', sans-serif, Arial, sans-serif;
   font-weight: 400;
   text-align: left;
 }
@@ -46,7 +46,7 @@ h2 {
 }
 .genesis--MarketingBanner-marketingBanner, .genesis--MarketingBanner-marketingBannerList, .genesis--MarketingBanner-marketingBannerOrderSummary, .genesis--MarketingBanner-marketingBannerOverview {
   align-items: center;
-  background: linear-gradient(90deg,#8a3ffc,#0062ff 50%,#0530ad);
+  background: linear-gradient(90deg,#8a3ffc,#0096D6 50%,#28458E);
   color: var(--cds-ui-02,#fff);
   display: flex;
   font-weight: 600;
@@ -56,7 +56,7 @@ h2 {
   padding-top: 0.75rem;
 }
 .genesis--MarketingBanner-marketingBannerOverview a {
-  color: #89b2ff;
+  color: #28458E;
 }
 .genesis--MarketingBanner-marketingBannerOverview svg {
   cursor: pointer;
@@ -72,4 +72,27 @@ h2 {
 
 .slide-pane__close svg {
   width: unset;
+}
+
+
+.bx--btn--primary {
+  background-color: #0096D6;
+
+}
+
+
+.bx--btn--primary:hover {
+  background-color: #0096D6;
+  opacity: .8;
+}
+
+.navheader_logo svg{
+  margin-left: 20px;
+  // width: 50px;
+  
+}
+svg{
+  fill: #ffff;
+  width: 40%;
+
 }
