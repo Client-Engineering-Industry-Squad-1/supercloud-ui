@@ -216,7 +216,7 @@ const config = require('../config/config');
 
   require('./api')(app, config.apiHost);
 
-  const loginEnpoints = ['/solutions*', '/bom*', '/services*', '/onboarding*', '/controls*', '/mapping*', '/nists*'];
+  const loginEnpoints = ['/solutions*', '/bom*', '/services*', '/onboarding*', '/controls*', '/mapping*', '/nists*','/deployments*'];
 
   const ensureAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated() && req.session) {

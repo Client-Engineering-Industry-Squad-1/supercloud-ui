@@ -22,6 +22,7 @@ import SolutionModal from "./SolutionModal";
 import { solutionBomsHeader } from '../../../data/data';
 
 import NotFound from "../../NotFound";
+import CreateDeploymentForm from './CreateDeploymentForm';
 
 
 class SolutionDetailsView extends Component {
@@ -157,7 +158,9 @@ class SolutionDetailsView extends Component {
                                             disabled={false}
                                             onClick={() => this.deployInTechZone()} >
                                             Deploy in TechZone
-                                        </Button>}
+                                        </Button>} 
+                                        {console.log(data?.id)}                 
+                                        <CreateDeploymentForm solutionId={data?.id} />
                                         <Button
                                             renderIcon={Download16}
                                             onClick={() => this.downloadTerraform()} >

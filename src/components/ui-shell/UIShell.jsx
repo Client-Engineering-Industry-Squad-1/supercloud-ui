@@ -266,10 +266,21 @@ class UIShell extends Component {
                           onClick={() => { this.setState({ activeItem: '/solutions' }) }}>Public Solutions</SideNavMenuItem>
                         :
                         <SideNavMenuItem href='/solutions'>
-                          Solutions
+                          Public Solutions
                           <Locked16 style={{ marginLeft: "auto" }} />
                         </SideNavMenuItem>
                       }
+
+                      {this.state.user ?
+                        <SideNavMenuItem element={Link} to='/deployments'
+                          isActive={this.state.activeItem === '/deployments'}
+                          onClick={() => { this.setState({ activeItem: '/deployments' }) }}>Created Deployments</SideNavMenuItem>
+                        :
+                        <SideNavMenuItem href='/deployments'>
+                          Created Deployments
+                          <Locked16 style={{ marginLeft: "auto" }} />
+                        </SideNavMenuItem>
+                      }   
 
                     </SideNavMenu> : <></>}
 
