@@ -161,7 +161,7 @@ class UIShell extends Component {
                 </a>
 
                 </div> */}
-              <HeaderName prefix={ApplicationMode.isFsControlsMode() ? 'IBM Cloud' : 'PepsiCo Super Cloud'}>
+              <HeaderName prefix={ApplicationMode.isFsControlsMode() ? 'IBM Cloud' : 'IBM Technology Zone'}>
                 {ApplicationMode.isFsControlsMode() ? 'Controls Catalog' : 'Deployer'}
               </HeaderName>
               <HeaderNavigation aria-label="navigation">
