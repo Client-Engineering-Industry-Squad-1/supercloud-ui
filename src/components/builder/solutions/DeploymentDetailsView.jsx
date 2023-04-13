@@ -181,12 +181,15 @@ class DeploymentDetailsView extends Component {
           modalHeading="Edit Deployment"
           primaryButtonText="Save Draft"
           secondaryButtonText="Cancel"
+          onRequestSubmit={() => {this.handleSaveDraft();
+          }}
+          onSecondarySubmit={this.handleCloseModal}
         >
           <ModalBody>
             <Form>
               {this.state.variables.map((variable, index) => (
                 <TextInput
-                  id={`var-${variable.name}`}
+                  id={variable.name}
                   key={variable.name}
                   labelText={variable.name}
                   value={variable.value}
@@ -195,14 +198,6 @@ class DeploymentDetailsView extends Component {
               ))}
             </Form>
           </ModalBody>
-          <div className="bx--modal-footer">
-            <Button kind="secondary" onClick={this.handleCloseModal}>
-              Cancel
-            </Button>
-            <Button kind="primary" onClick={this.handleSaveDraft}>
-              Save Draft
-            </Button>
-          </div>
         </Modal>
       </Grid>
     );
