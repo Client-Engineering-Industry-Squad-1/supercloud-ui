@@ -1,6 +1,8 @@
 import React, { useState, useEffect }  from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button, Form, TextInput, Modal, ModalBody } from 'carbon-components-react';
+import { Add16 } from '@carbon/icons-react';
+import './_CreateDeploymentForm.scss';
 
 const DeploymentForm = ({solutionId}) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,7 +61,7 @@ const DeploymentForm = ({solutionId}) => {
       name: deploymentName,
       solution_id: solutionId,
       state: "Draft",
-      variables: formData.map((item) => ({ name: item.name, value: String(item.value) }))
+      variables: formData.map((item) => ({ name: item.name, value: item.value ? String(item.value) : "" }))
     };
     try {
       const response = await fetch(`/api/deployment`, {
@@ -69,19 +71,20 @@ const DeploymentForm = ({solutionId}) => {
         },
         body: JSON.stringify(data)
       });
+      console.log(data);
+      const newDeployment = await response.json();
+      const navBarItem = document.querySelector('a[href="/deployments"]');
+      navBarItem.click();
+      navigate(`/deployments/${newDeployment.id}`);
     } catch (error) {
       console.error(error);
     }
-    console.log(data)
-    const navBarItem = document.querySelector('a[href="/deployments"]');
-    navBarItem.click();
-    navigate('/deployments');
     handleCloseModal();
   };
 
   return (
     <>
-      <Button onClick={handleOpenModal}>Deploy</Button>
+      <Button className="deploy-button" renderIcon={Add16} onClick={handleOpenModal}>Deploy</Button>
       <Modal
         open={isOpen}
         onRequestClose={handleCloseModal}

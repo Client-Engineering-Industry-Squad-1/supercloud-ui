@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import {Grid,Row,Column,Tile,OverflowMenu,OverflowMenuItem} from "carbon-components-react";
+import { Grid,Row,Column,Tile,OverflowMenu,OverflowMenuItem } from "carbon-components-react";
 import './_DeploymentView.scss';
+import DeploymentDetailsView from './DeploymentDetailsView';
 
 class DeploymentsView extends Component {
   constructor(props) {
@@ -10,12 +11,12 @@ class DeploymentsView extends Component {
       deployments: [],
       loading: true,
     };
+    this.handleEditClick = this.handleEditClick.bind(this);
   }
 
   async loadDeployments() {
     const response = await fetch(`/api/deployment`);
     const data = await response.json();
-    console.log([data]);
     this.setState({ deployments: data, loading: false });
   }
 
@@ -23,11 +24,16 @@ class DeploymentsView extends Component {
     this.loadDeployments();
   }
 
+  handleEditClick() {
+    this.setState({ isModalOpen: true });
+  }
+
   render() {
     const { deployments, loading } = this.state;
-
     if (loading) {
-      return <div>Loading...</div>;
+      return (
+        <div/>
+      );
     }
 
     return (
@@ -43,12 +49,12 @@ class DeploymentsView extends Component {
                 <Tile>
                   <div className="d-tile-header">
                     <Link to={`/deployments/${deployment.id}`}>
-                      <h5>{deployment.name}</h5>
+                      <h5 className="deployment-name">{deployment.name}</h5>
                     </Link>
 
                     <OverflowMenu>
                       <OverflowMenuItem itemText="Edit" onClick={() => console.log('Edit deployment')} />
-                      <OverflowMenuItem itemText="Delete" onClick={() => console.log('Delete deployment')} />
+                      <OverflowMenuItem itemText="Delete" onClick={() => this.handleEditClick(deployment.id)} />
                     </OverflowMenu>
                   </div>
                   <div className="d-tile-desc">{deployment.state}</div>

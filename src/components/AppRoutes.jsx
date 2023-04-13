@@ -22,6 +22,10 @@ const DeploymentsView = importedComponent(
     () => import(/* webpackChunkName:'solutions' */ './builder/solutions/DeploymentsView'),
     {LoadingComponent: Loading});
 
+const DeploymentDetailsView = importedComponent(
+    () => import(/* webpackChunkName:'solutions' */ './builder/solutions/DeploymentDetailsView'),
+    {LoadingComponent: Loading});
+
 const SolutionDetailsView = importedComponent(
     () => import(/* webpackChunkName:'solutions' */ './builder/solutions/SolutionDetailsView'),
     {LoadingComponent: Loading});
@@ -133,6 +137,7 @@ class AppRoutes extends React.Component {
                 <Route path='/solutions' exact element={<SolutionsView user={this.props.user} addNotification={this.props.addNotification} />} />
                 <Route path='/solutions/user' exact element={<SolutionsView user={this.props.user} addNotification={this.props.addNotification} isUser />} />
                 <Route path='/deployments' exact element={<DeploymentsView user={this.props.user} addNotification={this.props.addNotification} isUser />} />
+                <Route path={'/deployments/:deploymentId'} element={<DeploymentDetailsView user={this.props.user} addNotification={this.props.addNotification}/>} />
                 <Route path='/solutions/new' exact element={<CreateSolutionView user={this.props.user} addNotification={this.props.addNotification} />} />
                 <Route path={'/solutions/:id'} element={<SolutionDetails user={this.props.user} addNotification={this.props.addNotification}/>} />
                 <Route path='/boms/user' exact element={<ArchitectureView user={this.props.user} addNotification={this.props.addNotification} isUser/>} />

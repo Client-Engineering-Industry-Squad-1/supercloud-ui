@@ -15,6 +15,7 @@
     "passport": "^0.5.2",
     "passport-oauth": "^1.0.0",
     "react-inject-env": "^2.1.0",
+    "sweetalert2": "^11.7.3",
     "yaml": "^2.0.1"
   },
   "scripts": {

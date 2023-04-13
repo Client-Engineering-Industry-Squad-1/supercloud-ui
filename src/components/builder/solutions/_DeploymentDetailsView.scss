@@ -1,0 +1,58 @@
+.deployment-details {
+    .dep-details__row {
+      padding-top: 1rem;
+    }
+    .deployment-state-row {
+      margin-bottom: 1.5rem;
+    }
+    .deployment-variables-row {
+      margin-top: 1rem;
+    }
+    .header-link{
+        font-size:.875rem;
+    }
+    h2 {
+      display: flex;
+      margin-right: 1rem;
+      margin-top: 1.5rem;
+    }
+    .deployment-name-header {
+      margin-right: -38rem;
+      margin-top: -3px;
+    }
+    .edit-draft-button,
+    .deploy-draft-button {
+      display: inline-block;
+      margin-left: 1rem;
+      margin-top: 1.4rem;
+    }
+    .swal-confirm-button{
+        background-color: #0096D6;
+    }
+    .swal-title,
+    .swal-content {
+        font-family: sans-serif;
+        font-weight: bold;
+        color: #152935;
+    }
+    .deployment-state {
+        margin-top: 10px;
+    }
+    .deployment-variable {
+        margin-top: 2.5px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .deployment-variable-label {
+          font-weight: bold;
+          color: #333;
+          margin-right: 5px;
+        }
+        .deployment-variable-value {
+          font-family: Arial, sans-serif;
+          font-size: 14px;
+          color: #444; //#666 555
+        }
+      }
+  }
