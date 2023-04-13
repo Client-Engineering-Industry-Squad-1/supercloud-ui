@@ -11,7 +11,6 @@ class DeploymentsView extends Component {
       deployments: [],
       loading: true,
     };
-    this.handleEditClick = this.handleEditClick.bind(this);
   }
 
   async loadDeployments() {
@@ -22,10 +21,6 @@ class DeploymentsView extends Component {
 
   componentDidMount() {
     this.loadDeployments();
-  }
-
-  handleEditClick() {
-    this.setState({ isModalOpen: true });
   }
 
   render() {
@@ -51,10 +46,8 @@ class DeploymentsView extends Component {
                     <Link to={`/deployments/${deployment.id}`}>
                       <h5 className="deployment-name">{deployment.name}</h5>
                     </Link>
-
                     <OverflowMenu>
-                      <OverflowMenuItem itemText="Edit" onClick={() => console.log('Edit deployment')} />
-                      <OverflowMenuItem itemText="Delete" onClick={() => this.handleEditClick(deployment.id)} />
+                      <OverflowMenuItem itemText="Delete" />
                     </OverflowMenu>
                   </div>
                   <div className="d-tile-desc">{deployment.state}</div>

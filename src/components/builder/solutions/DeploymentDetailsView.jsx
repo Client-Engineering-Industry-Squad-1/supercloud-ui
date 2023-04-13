@@ -11,6 +11,7 @@ class DeploymentDetailsView extends Component {
       loading: true,
       isModalOpen: false,
       variables:[],
+      buttonsDisabled: false
     };
     this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
     this.handleDeployButtonClick = this.handleDeployButtonClick.bind(this);
@@ -49,6 +50,7 @@ class DeploymentDetailsView extends Component {
       title: 'Deploying...',
       html: 'Please wait while the deployment is being processed.',
       allowOutsideClick: false,
+      confirmButtonColor: '#000000',
       didOpen: () => {
         Swal.showLoading();
       }
@@ -64,14 +66,9 @@ class DeploymentDetailsView extends Component {
     })
     .then(response => response.json())
     .then(data => {
-      this.setState({ deployment: data, isModalOpen: false });
+      this.setState({ deployment: data, isModalOpen: false, buttonsDisabled: true }); 
       Swal.fire({
-        customClass: {
-          title: 'swal-title',
-          content: 'swal-content',
-          actions: 'swal-actions',
-          confirmButton: 'swal-confirm-button',
-        },
+        confirmButtonColor: '#000000',
         icon: 'success',
         title: 'Deployment Successful!',
         text: 'The deployment was successfully processed.'
@@ -106,12 +103,7 @@ class DeploymentDetailsView extends Component {
     .then(data => {
       this.setState({ deployment: data, isModalOpen: false });
       Swal.fire({
-        customClass: {
-          title: 'swal-title',
-          content: 'swal-content',
-          actions: 'swal-actions',
-          confirmButton: 'swal-confirm-button',
-        },
+        confirmButtonColor: '#000000',
         icon: 'success',
         title: 'Draft Saved!',
       });
@@ -130,6 +122,11 @@ class DeploymentDetailsView extends Component {
   render() {
     const { deployment, loading, isModalOpen } = this.state;
     const deploymentId = this.getDeploymentIdFromUrl();
+
+    let buttonsDisabled = false;
+    if (deployment && deployment.state === "Deployed") {
+      buttonsDisabled = true;
+    }
     if (loading) {
       return (
         <div/>
@@ -149,12 +146,16 @@ class DeploymentDetailsView extends Component {
             <h2>{deployment.name}</h2>
           </Column>
           <Column className="edit-deploy-buttons">
-            <Button className="edit-draft-button" onClick={this.handleEditButtonClick}>
-              Edit
-            </Button>
-            <Button className="deploy-draft-button" onClick={this.handleDeployButtonClick}>
-              Deploy
-            </Button>
+            {!buttonsDisabled && (
+              <>
+                <Button className="edit-draft-button" onClick={this.handleEditButtonClick}>
+                  Edit
+                </Button>
+                <Button className="deploy-draft-button" onClick={this.handleDeployButtonClick}>
+                  Deploy
+                </Button>
+              </>
+            )}
           </Column>
         </Row>
         <Row className="deployment-state-row">
@@ -166,7 +167,7 @@ class DeploymentDetailsView extends Component {
         <Row className="deployment-variables-row">
           <Column>
             <h3>Variables</h3>
-            {deployment.variables.map((variable) => (
+            {deployment.variables.map((variable, index) => (
               <div key={variable.name} className="deployment-variable">
                 <p className="deployment-variable-label">{variable.name}:</p>
                 <p className="deployment-variable-value">{variable.value}</p>
@@ -180,28 +181,32 @@ class DeploymentDetailsView extends Component {
           modalHeading="Edit Deployment"
           primaryButtonText="Save Draft"
           secondaryButtonText="Cancel"
-          onRequestSubmit={() => {this.handleSaveDraft();
-          }}
-          onSecondarySubmit={this.handleCloseModal}
         >
           <ModalBody>
             <Form>
-              <TextInput id="deployment-name" labelText="Deployment Name" defaultValue={deployment.name} />
-              {deployment.variables.map((variable, index) => (
+              {this.state.variables.map((variable, index) => (
                 <TextInput
+                  id={`var-${variable.name}`}
                   key={variable.name}
-                  id={variable.name}
                   labelText={variable.name}
-                  defaultValue={variable.value}
-                  onChange={(e) => this.handleVariableChange(index, e.target.value)}
+                  value={variable.value}
+                  onChange={(event) => this.handleVariableChange(index, event.target.value)}
                 />
               ))}
             </Form>
           </ModalBody>
+          <div className="bx--modal-footer">
+            <Button kind="secondary" onClick={this.handleCloseModal}>
+              Cancel
+            </Button>
+            <Button kind="primary" onClick={this.handleSaveDraft}>
+              Save Draft
+            </Button>
+          </div>
         </Modal>
       </Grid>
     );
-  }
+  }  
 }
 
 export default DeploymentDetailsView;
