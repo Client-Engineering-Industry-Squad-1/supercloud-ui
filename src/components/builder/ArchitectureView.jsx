@@ -89,7 +89,7 @@ class ArchitectureView extends Component {
         const galleryData = [];
         galleryData.push({
             id: 'public-boms',
-            sectionTitle: `${this.props.isUser ? 'Custom' : this.props.isInfra ? 'Infrastructure' : this.props.isSoftware ? 'Software' :  'Public' } Reference Architectures`,
+            sectionTitle: `${this.props.isUser ? 'Custom' : this.props.isInfra ? 'Infrastructure Patterns' : this.props.isSoftware ? 'Software Patterns' :  'Public' } Reference Architectures`,
             galleryItems: this.state.architectures?.map(arch => {
                 return {
                     title: arch.name,
@@ -298,7 +298,7 @@ class ArchitectureView extends Component {
 
 
                 <h2 style={{"display": "flex"}}>
-                    {`${this.props.isUser ? 'Custom Reference Architectures' : this.props.isInfra ? 'Infrastructures' : this.props.isSoftware ? 'Software' :  'Public Reference Architectures' }`}
+                    {`${this.props.isUser ? 'Custom Reference Architectures' : this.props.isInfra ? 'Infrastructure Patterns' : this.props.isSoftware ? 'Software Patterns' :  'Public Reference Architectures' }`}
                     <div style={{marginLeft: "auto", "display": "flex"}}>
                         {(this.state.user?.roles?.includes("editor") && this.props.isUser) || this.state.user?.roles?.includes("admin") ? 
                             <Button onClick={() => this.showArchModal(false)} size='small'>Create +</Button> : <></>}

@@ -137,7 +137,7 @@ class SolutionsView extends Component {
                 <Row className="sol-page__row">
                     <Column lg={{ span: 12 }}>
                         <h2>
-                            {`${this.props.isUser ? 'Custom' : 'Public'} Solutions`}
+                            {`${this.props.isUser ? 'Solution Builder' : 'Super Cloud Market Place'}`}
                             {this.state.user?.roles?.includes("editor") ? <div className="create-buttons"><Button
                                 size="sm"
                                 onClick={() => this.setState({ nav: '/solutions/new' })}
@@ -150,9 +150,9 @@ class SolutionsView extends Component {
                                 </OverflowMenu></div> : <></>}
                         </h2>
                         <br></br>
-
                     </Column>
                 </Row>
+                {this.props.isUser ? <h3 className="custom-sol-header" >Created Solutions</h3> : null}
 
                 <div className="tile-group">
                     {this.state.solutions.map((solution) => (

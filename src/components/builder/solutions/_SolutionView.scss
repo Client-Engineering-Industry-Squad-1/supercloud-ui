@@ -11,6 +11,13 @@ div.solutions h2 {
     justify-content: space-between;
 }
 
+div.solutions h3 {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .5rem;
+    font-size: 1.5rem;
+}
+
 div.solutions .tile-group {
     display: flex;
     flex-wrap: wrap;

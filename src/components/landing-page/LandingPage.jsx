@@ -54,10 +54,10 @@ class LandingPage extends Component {
                 </BreadcrumbItem>
               </Breadcrumb>
               <h1 className="landing-page__heading">
-              Tech Zone Deployer
+              IBM Super Cloud
               </h1>
               <h2 className="landing-page__subheading">
-                Create composite multi-cloud solutions rapidly with automation that deploys IBM Software
+                Create composite multi-cloud solutions rapidly with automation that deploys Infrastructure and Software using Approved Reference Architecture Patterns
               </h2>
 
             </Column>
@@ -66,7 +66,7 @@ class LandingPage extends Component {
               <Column lg={{ span: 6 }} sm={{ span: 12 }}>
 
                 <h2 className="landing-page__subheading">
-                  What can you do with Accelerator Toolkit automation ?
+                  What can you do with Super Cloud?
                 </h2>
                 <p className="landing-page__p">
                   The  automation  provides a simple experience for the creation of common architecture patterns for software and cloud infrastructures to enable

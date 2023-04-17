@@ -161,8 +161,8 @@ class UIShell extends Component {
                 </a>
 
                 </div> */}
-              <HeaderName prefix={ApplicationMode.isFsControlsMode() ? 'IBM Cloud' : 'IBM Technology Zone'}>
-                {ApplicationMode.isFsControlsMode() ? 'Controls Catalog' : 'Deployer'}
+              <HeaderName prefix={ApplicationMode.isFsControlsMode() ? 'IBM Cloud' : 'IBM Super'}>
+                {ApplicationMode.isFsControlsMode() ? 'Controls Catalog' : 'Cloud'}
               </HeaderName>
               <HeaderNavigation aria-label="navigation">
               </HeaderNavigation>
@@ -247,15 +247,15 @@ class UIShell extends Component {
                       {ApplicationMode.isFsControlsMode() ? 'Controls Catalog' : 'Overview'}
                     </SideNavMenuItem>
 
-                    {ApplicationMode.isBuilderMode() ? <SideNavMenu defaultExpanded title="Solutions">
+                    {ApplicationMode.isBuilderMode() ? <SideNavMenu defaultExpanded title="Solution Catalog">
 
                       {this.state.user ?
                         <SideNavMenuItem element={Link} to='/solutions/user'
                           isActive={this.state.activeItem === '/solutions/user'}
-                          onClick={() => { this.setState({ activeItem: '/solutions/user' }) }}>Created Solutions</SideNavMenuItem>
+                          onClick={() => { this.setState({ activeItem: '/solutions/user' }) }}>Solution Builder</SideNavMenuItem>
                         :
                         <SideNavMenuItem href='/solutions/user'>
-                          Created Solutions
+                          Solution Builder
                           <Locked16 style={{ marginLeft: "auto" }} />
                         </SideNavMenuItem>
                       }
@@ -263,15 +263,16 @@ class UIShell extends Component {
                       {this.state.user ?
                         <SideNavMenuItem element={Link} to='/solutions'
                           isActive={this.state.activeItem === '/solutions'}
-                          onClick={() => { this.setState({ activeItem: '/solutions' }) }}>Public Solutions</SideNavMenuItem>
+                          onClick={() => { this.setState({ activeItem: '/solutions' }) }}>Super Cloud Market Place</SideNavMenuItem>
                         :
                         <SideNavMenuItem href='/solutions'>
-                          Public Solutions
+                          Super Cloud Market Place
                           <Locked16 style={{ marginLeft: "auto" }} />
                         </SideNavMenuItem>
                       }
+                    </SideNavMenu> : <></>}
 
-                      {this.state.user ?
+                    {this.state.user ?
                         <SideNavMenuItem element={Link} to='/deployments'
                           isActive={this.state.activeItem === '/deployments'}
                           onClick={() => { this.setState({ activeItem: '/deployments' }) }}>Created Deployments</SideNavMenuItem>
@@ -280,20 +281,18 @@ class UIShell extends Component {
                           Created Deployments
                           <Locked16 style={{ marginLeft: "auto" }} />
                         </SideNavMenuItem>
-                      }   
-
-                    </SideNavMenu> : <></>}
-
-                    {ApplicationMode.isBuilderMode() ? <SideNavMenu title="Reference Architectures" defaultExpanded
+                      }  
+                      
+                    {ApplicationMode.isBuilderMode() ? <SideNavMenu title="Enterprise Architecture Catalog" defaultExpanded
                       isActive={['/solutions', '/boms', '/services'].includes(this.state.activeItem)}>
 
                       {this.state.user ?
                         <SideNavMenuItem element={Link} to='/boms/infrastructure'
                           isActive={this.state.activeItem === '/boms/infrastructure'}
-                          onClick={() => { this.setState({ activeItem: '/boms/infrastructure' }) }}>Infrastructure</SideNavMenuItem>
+                          onClick={() => { this.setState({ activeItem: '/boms/infrastructure' }) }}>Infrastructure Patterns</SideNavMenuItem>
                         :
                         <SideNavMenuItem href='/boms/infrastructure'>
-                          Infrastructure
+                          Infrastructure Patterns
                           <Locked16 style={{ marginLeft: "auto" }} />
                         </SideNavMenuItem>
                       }
@@ -301,18 +300,17 @@ class UIShell extends Component {
                       {this.state.user ?
                         <SideNavMenuItem element={Link} to='/boms/software'
                           isActive={this.state.activeItem === '/boms/software'}
-                          onClick={() => { this.setState({ activeItem: '/boms/software' }) }}>Software</SideNavMenuItem>
+                          onClick={() => { this.setState({ activeItem: '/boms/software' }) }}>Software Patterns</SideNavMenuItem>
                         :
                         <SideNavMenuItem href='/boms/software'>
-                          Software
+                          Software Patterns
                           <Locked16 style={{ marginLeft: "auto" }} />
                         </SideNavMenuItem>
                       }
 
 
                     </SideNavMenu> : <></>}
-
-                    <SideNavMenu title="Compliance" defaultExpanded
+                    <SideNavMenu title="Compliance Catalog" defaultExpanded
                       isActive={['/onboarding', '/controls', '/mapping', '/nists'].includes(this.state.activeItem)} >
 
                       {this.state.user ?
@@ -352,7 +350,7 @@ class UIShell extends Component {
 
                     </SideNavMenu>
 
-                    {ApplicationMode.isBuilderMode() ? <SideNavMenu title="Automation Catalog">
+                    {ApplicationMode.isBuilderMode() ? <SideNavMenu title="Module Catalog">
 
                       {this.state?.user?.email?.endsWith('ibm.com') ? <SideNavMenuItem
                         href="https://pages.github.ibm.com/Ondrej-Svec2/ibm-software-map"
