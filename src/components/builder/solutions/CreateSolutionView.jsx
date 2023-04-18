@@ -202,8 +202,24 @@ class CreateSolutionview extends Component {
             ...f,
             enabled: this.state.catalog?.boms?.find(bom => bom.category === 'infrastructure' && bom.cloudProvider === platform?.name && bom.flavor === f.name) !== undefined ? true : false
         }));
-        const storageOptions = this.state.catalog?.boms?.filter(bom => bom.category === 'storage' && bom.cloudProvider === platform?.name);
-        const softwareOptions = this.state.catalog?.boms?.filter(bom => bom.category === 'software' && (bom.cloudProvider === 'multi' || bom.cloudProvider === undefined));
+        const softwareBomNames = [
+            '270-self-hosted-integration-runtime',
+            '350-data-hub-connection',
+            '350-integration-services-connection',
+            '350-oracle-database-connection',
+            '350-pfna-data-lake-connection',
+            '350-teradata-connection',
+            '350-salesforce-connection',
+            '380-inbound-internet-connection',
+            '470-databricks-workspace',
+            '540-aks-container-deployment'
+        ];
+        const additionalSoftwareBoms = this.state.catalog?.boms?.filter(bom =>
+            softwareBomNames.includes(bom.name)
+        );
+        const storageOptions = this.state.catalog?.boms?.filter((bom => (bom.category === 'storage' && bom.cloudProvider === platform?.name) || bom.name === '150-azure-storage-blob'));
+        const softwareOptions = this.state.catalog?.boms?.filter(bom => bom.category === 'software' && (bom.cloudProvider === 'multi' || bom.cloudProvider === undefined))?.concat(additionalSoftwareBoms);
+        console.log(softwareOptions);
         const storage = this.state.catalog?.boms?.find(bom => bom.name === this.state.storage);
         const software = this.state.software.map(swId => (this.state.catalog?.boms?.find(sw => sw.name === swId)));
         const defaultShortDesc = this.state.fields.short_desc === "" && this.state.curStepIx === STEP_DETAILS ? `Solution based on ${software?.map(sw => (`${sw.displayName ?? sw.name ?? sw.id}`)).join(', ')} on ${platform?.displayName}.` : '';
@@ -422,7 +438,7 @@ class CreateSolutionview extends Component {
 
                                                             {
                                                                 storageOptions?.length ?
-                                                                    storageOptions.map((storage) => (
+                                                                    storageOptions.reverse().map((storage) => (
 
                                                                         <label className="plan complete-plan" htmlFor={storage.name} key={storage.name}>
                                                                             <input type="radio" name={storage.name} id={storage.name}
@@ -463,7 +479,7 @@ class CreateSolutionview extends Component {
                                                 id='software-bundles'
                                                 isMultiSelect
                                                 tiles= {
-                                                    softwareOptions.map((software) => ({
+                                                    softwareOptions.reverse().map((software) => ({
                                                         id: software.name,
                                                         values: {
                                                             title: software.name,
