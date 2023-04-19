@@ -28,7 +28,7 @@ const STEP_SUMMARY = 5;
 
 const STEP_INFRA_PLATFORM = 0;
 const STEP_INFRA_FLAVOR = 1;
-const STEP_INFRA_STORAGE = 2;
+const STEP_INFRA_INFRASTRUCTURE = 2;
 
 const CatalogContent = ({ logo, icon, title, displayName, status, type, description }) => (
     <div className={`iot--sample-tile`}>
@@ -65,7 +65,7 @@ class CreateSolutionview extends Component {
             persona: undefined,
             platform: undefined,
             architecture: undefined,
-            storage: undefined,
+            infrastructure: [],
             software: [],
             fields: {
                 id: guid,
@@ -123,8 +123,8 @@ class CreateSolutionview extends Component {
                         return this.state.platform === undefined
                     case STEP_INFRA_FLAVOR:
                         return this.state.flavor === undefined
-                    case STEP_INFRA_STORAGE:
-                        return this.state.storage === undefined
+                    case STEP_INFRA_INFRASTRUCTURE:
+                        return this.state.infrastructure?.length === 0;
                     default:
                         return true;
                 }
@@ -146,9 +146,10 @@ class CreateSolutionview extends Component {
     handleNext() {
         if (this.state.curStepIx === STEP_SUMMARY) {
             this.handleSubmit();
-        } else if (this.state.curStepIx === STEP_INFRASTRUCTURE && this.state.platform !== 'byo-infra' && this.state.infraStepIx !== STEP_INFRA_STORAGE) {
+        } else if (this.state.curStepIx === STEP_INFRASTRUCTURE && this.state.platform !== 'byo-infra' && this.state.infraStepIx !== STEP_INFRA_INFRASTRUCTURE) {
             this.setState({ infraStepIx: this.state.infraStepIx + 1 });
-        } else {
+        }
+        else {
             if (this.state.curStepIx + 1 === STEP_SOFTWARE) this.setState({ software: [] });
             this.setState({ curStepIx: this.state.curStepIx + 1 });
         }
@@ -165,9 +166,9 @@ class CreateSolutionview extends Component {
 
     handleSubmit = () => {
         // Get infrastructure layers
+        // TODO: May need to remove line below
         const layers = new Set(this.state.catalog?.boms?.filter(bom => bom.category === 'infrastructure' && bom.cloudProvider === this.state.platform && bom.flavor === this.state.flavor));
-        // Get storage layer(s)
-        if (this.state.storage) layers.add(this.state.catalog?.boms?.find(bom => bom.name === this.state.storage));
+        for (const infra of this.state.infrastructure) layers.add(this.state.catalog?.boms?.find(bom => bom.name === infra));
         // Get software layers
         for (const sw of this.state.software) layers.add(this.state.catalog?.boms?.find(bom => bom.name === sw));
         // Create solution
@@ -202,15 +203,15 @@ class CreateSolutionview extends Component {
             ...f,
             enabled: this.state.catalog?.boms?.find(bom => bom.category === 'infrastructure' && bom.cloudProvider === platform?.name && bom.flavor === f.name) !== undefined ? true : false
         }));
-        // const storageOptions = this.state.catalog?.boms?.filter(bom => (bom.category === 'storage' || bom.category === 'infrastructure') && (bom.cloudProvider === platform?.name || bom.cloudProvider === 'azure' || bom.cloudProvider === undefined) && ( bom.flavor === undefined));
         const softwareOptions = this.state.catalog?.boms?.filter(bom => bom.category === 'software' && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined));
-        const storageOptions = this.state.catalog?.boms?.filter(bom => (bom.category === 'infrastructure' || bom.category === 'storage') && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined));
-        console.log('storage', storageOptions);
+        const infraOptions = flavor ? this.state.catalog?.boms?.filter(bom => (bom.category === 'infrastructure' || bom.category === 'storage') && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined) && (bom.flavor === flavor.name || bom.flavor === undefined)) : this.state.catalog?.boms?.filter(bom => (bom.category === 'infrastructure' || bom.category === 'storage') && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined))
+        console.log('infrastructure', infraOptions);
         console.log('software', softwareOptions)
-        const storage = this.state.catalog?.boms?.find(bom => bom.name === this.state.storage);
+        const infrastructure = this.state.infrastructure.map(infraId => (this.state.catalog?.boms?.find(infra => infra.name === infraId)));
         const software = this.state.software.map(swId => (this.state.catalog?.boms?.find(sw => sw.name === swId)));
-        const defaultShortDesc = this.state.fields.short_desc === "" && this.state.curStepIx === STEP_DETAILS ? `Solution based on ${software?.map(sw => (`${sw.displayName ?? sw.name ?? sw.id}`)).join(', ')} on ${platform?.displayName}.` : '';
-        const defaultLongDesc = this.state.fields.long_desc === "" && this.state.curStepIx === STEP_DETAILS ? `Solution based on ${software?.map(sw => (`${sw.displayName ?? sw.name ?? sw.id}`)).join(', ')} in ${flavor?.displayName} reference architecture deployed on ${platform?.displayName} with ${storage?.displayName} as storage option.` : '';
+        // TODO: Update the review
+        const defaultShortDesc = this.state.fields.short_desc === "" && this.state.curStepIx === STEP_DETAILS ? `Solution based on ${infrastructure?.map(infra => (`${infra.displayName ?? infra.name ?? infra.id}`)).join(', ')} and ${software?.map(sw => (`${sw.displayName ?? sw.name ?? sw.id}`)).join(', ')} on ${platform?.displayName}.` : '';
+        const defaultLongDesc = this.state.fields.long_desc === "" && this.state.curStepIx === STEP_DETAILS ? `Solution based on ${infrastructure?.map(infra => (`${infra.displayName ?? infra.name ?? infra.id}`)).join(', ')} and ${software?.map(sw => (`${sw.displayName ?? sw.name ?? sw.id}`)).join(', ')} in ${flavor?.displayName} reference architecture deployed on ${platform?.displayName}` : '';
         if (defaultShortDesc || defaultLongDesc) this.setState({
             fields: {
                 ...this.state.fields,
@@ -417,39 +418,45 @@ class CreateSolutionview extends Component {
                                                         </form>
                                                     </div>
                                                 </div>
-                                            :  this.state.infraStepIx === STEP_INFRA_STORAGE ? 
-                                                <div>
-                                                    <div className="selection-set">
-                                                        <form className="plans">
-
-                                                            <div className="title">
-                                                                Now you have selected your reference architecture you will require some file storage for your IBM Software
-                                                            </div>
-
-                                                            {
-                                                                storageOptions?.length ?
-                                                                    storageOptions.reverse().map((storage) => (
-
-                                                                        <label className="plan complete-plan" htmlFor={storage.name} key={storage.name}>
-                                                                            <input type="radio" name={storage.name} id={storage.name}
-                                                                                className={this.state.storage === storage.name ? 'checked' : ''}
-                                                                                onClick={() => { this.setState({ storage: storage.name }) }} />
-                                                                            <div className={`plan-content`}>
-                                                                                <img loading="lazy" src={storage.iconUrl} alt="" />
-
-                                                                                <div className="plan-details">
-                                                                                    <span>{storage.displayName ?? storage.name}</span>
-                                                                                    <p>{storage.description}</p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </label>
-
-                                                                    )) : <p>No Storage options</p>
-                                                            }
-
-                                                        </form>
+                                            :  this.state.infraStepIx === STEP_INFRA_INFRASTRUCTURE ? 
+                                            <Grid className='wizard-grid'>
+                                            <Row>
+                                                <Column lg={{ span: 12 }}>
+                                                    <div className="title">
+                                                        We are getting close to create your custom solution for your client or partner, we need a few more details like the solution name and description.
+                                                        Dont worry you can edit you solution once its created to refine it so you client or partner is completely happy.
                                                     </div>
-                                                </div>
+                                                    <br />
+                                                    <StatefulTileCatalog
+                                                        title='Infrastructure Bundles'
+                                                        id='infrastructure-bundles'
+                                                        isMultiSelect
+                                                        tiles= {
+                                                            infraOptions.reverse().map((infrastructure) => ({
+                                                                id: infrastructure.name,
+                                                                values: {
+                                                                    title: infrastructure.name,
+                                                                    logo: infrastructure.iconUrl,
+                                                                    displayName: infrastructure.displayName ?? infrastructure.name,
+                                                                    description: infrastructure.description,
+                                                                },
+                                                                renderContent: tileRenderFunction,
+                                                            }))
+                                                        }
+                                                        pagination={{ pageSize: 9 }}
+                                                        isSelectedByDefault={false}
+                                                        selectedTileIds={this.state.infrastructure}
+                                                        onSelection={(val) => {
+                                                            const infra = Array.from(this.state.infrastructure);
+                                                            const infraIx = this.state.infrastructure.indexOf(val);
+                                                            if (infraIx >= 0) infra.splice(infraIx, 1);
+                                                            else infra.push(val);
+                                                            this.setState({ infrastructure: infra });
+                                                        }} /> 
+                                                    <br />
+                                                </Column>
+                                            </Row>
+                                        </Grid>
                                             : <></>}
                                         </Column>
                                     </Row>
@@ -592,12 +599,20 @@ class CreateSolutionview extends Component {
                                                 <div className='arch'>
                                                     <p>You want to <strong>{persona?.displayName}</strong> <img loading="lazy" src={persona?.iconUrl} alt={persona?.displayName ?? ""} /></p>
                                                     <p>You chose to deploy you solution on <strong>{platform?.displayName}</strong> <img loading="lazy" src={platform?.iconUrl} alt={platform?.displayName ?? ""} /></p>
-                                                    <p>You have chosen the <strong>{flavor?.displayName}</strong> reference architecture <div className='flex-inline'><img loading="lazy" src={flavor?.iconUrl} alt={flavor?.displayName ?? ""} /><img loading="lazy" src={openshiftImg} alt="OpenShift" /></div></p>
-                                                    <p>It will install with the following Storage Option <img loading="lazy" src={storage?.iconUrl} alt={storage?.displayName ?? ""} /></p>
+                                                    <p>You have chosen the <strong>{flavor?.displayName}</strong> reference architecture <div className='flex-inline'><img loading="lazy" src={flavor?.iconUrl} alt={flavor?.displayName ?? ""} /></div></p>
                                                 </div>
 
                                                 <p>
-                                                    You have chosen the following IBM Software to help get your solution started:
+                                                    You have chosen the following Infrastructure to help get your solution started:
+                                                    <ul>
+                                                        {infrastructure?.map(infra => (
+                                                            <li key={infra.name}>{infra.displayName ?? infra.name}</li>
+                                                        ))}
+                                                    </ul>
+                                                </p>
+
+                                                <p>
+                                                    You have chosen the following Software to help get your solution started:
                                                     <ul>
                                                         {software?.map(sw => (
                                                             <li key={sw.name}>{sw.displayName ?? sw.name}</li>
