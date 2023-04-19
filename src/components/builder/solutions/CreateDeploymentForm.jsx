@@ -6,7 +6,6 @@ import './_CreateDeploymentForm.scss';
 
 const DeploymentForm = ({solutionId}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
   const [formData, setFormData] = useState([]);
   const [deploymentName, setDeploymentName] = useState("");
   const navigate = useNavigate();
@@ -56,7 +55,6 @@ const DeploymentForm = ({solutionId}) => {
   };
 
   const handleSaveDraft = async () => {
-    setIsSaved(true);
     const data = {
       name: deploymentName,
       solution_id: solutionId,
@@ -99,6 +97,7 @@ const DeploymentForm = ({solutionId}) => {
             <TextInput 
               id="deployment-name" 
               labelText="deployment_name" 
+              required="true"
               onChange={handleDeploymentNameChange}
               value={deploymentName}
             />
