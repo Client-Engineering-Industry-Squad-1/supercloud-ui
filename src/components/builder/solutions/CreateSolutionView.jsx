@@ -202,8 +202,9 @@ class CreateSolutionview extends Component {
             ...f,
             enabled: this.state.catalog?.boms?.find(bom => bom.category === 'infrastructure' && bom.cloudProvider === platform?.name && bom.flavor === f.name) !== undefined ? true : false
         }));
-        const storageOptions = this.state.catalog?.boms?.filter(bom => (bom.category === 'storage' || bom.category === 'infrastructure') && (bom.cloudProvider === platform?.name || bom.cloudProvider === 'azure'));
+        // const storageOptions = this.state.catalog?.boms?.filter(bom => (bom.category === 'storage' || bom.category === 'infrastructure') && (bom.cloudProvider === platform?.name || bom.cloudProvider === 'azure' || bom.cloudProvider === undefined) && ( bom.flavor === undefined));
         const softwareOptions = this.state.catalog?.boms?.filter(bom => bom.category === 'software' && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined));
+        const storageOptions = this.state.catalog?.boms?.filter(bom => (bom.category === 'infrastructure' || bom.category === 'storage') && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined));
         console.log('storage', storageOptions);
         console.log('software', softwareOptions)
         const storage = this.state.catalog?.boms?.find(bom => bom.name === this.state.storage);
@@ -328,7 +329,7 @@ class CreateSolutionview extends Component {
                                             <ProgressIndicator currentIndex={this.state.infraStepIx}>
                                                 <ProgressStep label="Platform" />
                                                 <ProgressStep label="Architecture" />
-                                                <ProgressStep label="Storage" />
+                                                <ProgressStep label="Infrastructure" />
                                             </ProgressIndicator>
                                             <br />
                                             { this.state.infraStepIx === STEP_INFRA_PLATFORM ? 
@@ -390,26 +391,29 @@ class CreateSolutionview extends Component {
                                                                 <p>We recommend you use the <strong>{persona?.flavor}</strong> reference architecture</p>
                                                             </div>
                                                             {
-                                                                flavors?.length ?
-                                                                    flavors.map((flavor) => (
-                                                                        <label className="plan complete-plan" htmlFor={flavor.name} key={flavor.name}>
-                                                                            <input type="radio" name={flavor.name} id={flavor.name}
-                                                                                disabled={!flavor.enabled}
-                                                                                className={this.state.flavor === flavor.name ? 'checked' : ''}
-                                                                                onClick={() => { if (flavor.enabled) this.setState({ flavor: flavor.name }) }} />
-                                                                            <div className={`plan-content${flavor.enabled ? '' : ' coming-soon'}`}>
-                                                                                <img loading="lazy" src={flavor.iconUrl} alt="" />
+                                                            flavors?.length ? (
+                                                                flavors.map((flavor, index) => (
+                                                                    <label className="plan complete-plan" htmlFor={flavor.name} key={flavor.name}>
+                                                                        <input type="radio" name="flavor" id={flavor.name} 
+                                                                            className={this.state.flavor === flavor.name ? 'checked' : ''}
+                                                                            onClick={() => { this.setState({ flavor: flavor.name }) }}
+                                                                            checked={index === 0}
+                                                                        />
+                                                                        <div className="plan-content">
+                                                                            <img loading="lazy" src={flavor.iconUrl} alt="" />
 
-                                                                                <div className="plan-details">
-                                                                                    <span>{flavor.displayName ?? flavor.name}
-                                                                                        {!flavor.enabled && <i><b><h6>Coming Soon !</h6></b></i>}
-                                                                                    </span>
-                                                                                    <p>{flavor.description}</p>
-                                                                                </div>
+                                                                            <div className="plan-details">
+                                                                                <span>
+                                                                                    {flavor.displayName ?? flavor.name}
+                                                                                </span>
+                                                                                <p>{flavor.description}</p>
                                                                             </div>
-                                                                        </label>
-                                                                    )) : <p>No Architecture Pattern</p>
-                                                            }
+                                                                        </div>
+                                                                    </label>
+                                                                ))
+                                                            ) : (<p>No Architecture Pattern</p>)
+                                                        }
+
                                                         </form>
                                                     </div>
                                                 </div>
