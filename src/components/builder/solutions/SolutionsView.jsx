@@ -176,6 +176,7 @@ class SolutionsView extends Component {
                                                 curSol: solution
                                             });
                                         }} /> : <></>}
+                                    <OverflowMenuItem itemText="Publish" />
                                 </OverflowMenu>
                             </div>
                             {/* <h6>{solution.id}</h6> */}
