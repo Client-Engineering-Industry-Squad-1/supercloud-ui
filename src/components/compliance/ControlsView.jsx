@@ -186,8 +186,7 @@ class ControlsView extends Component {
                     <Column lg={{span: 12}}>
                         <h2>Controls</h2>
                         <p>
-                            List of Controls defined for IBM Cloud for Financial Services&nbsp;
-                            <a target="_blank" href="https://cloud.ibm.com/docs/framework-financial-services?topic=framework-financial-services-about#framework-control-requirements">(more info...)</a>
+                            List of Controls
                         </p>
 
                         <br></br>

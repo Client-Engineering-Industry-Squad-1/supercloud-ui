@@ -274,7 +274,7 @@ class CreateSolutionview extends Component {
                                                 </p>
                                                 <br />
                                                 <p>
-                                                    Then, you will have to pick the IBM Software cartridges you need as part of your solution, from individual components of IBM Cloud Paks,
+                                                    Then, you will have to pick the Software cartridges you need as part of your solution, from individual components of IBM Cloud Paks,
                                                     Sustainability Software, or bringing your own custom Software tiles. Once you have completed all these steps you will be redirected to
                                                     your new solution and can download the automation to support the provisioning into your own environment.
                                                 </p>
@@ -374,7 +374,7 @@ class CreateSolutionview extends Component {
                                                                     <img loading="lazy" src={byoInfra} alt="" />
                                                                     <div className="plan-details">
                                                                         <span>Bring Your Own</span>
-                                                                        <p>Bring your own OpenShift infrastructure. Select only the software you want to deploy for your solution</p>
+                                                                        <p>Bring your own infrastructure. Select only the software you want to deploy for your solution</p>
                                                                     </div>
                                                                 </div>
                                                             </label>
