@@ -280,11 +280,6 @@ class CreateSolutionview extends Component {
                                                 </p>
                                             </div>
                                         </Column>
-                                        <Column lg={{ span: 6 }} md={{ span: 12 }}>
-                                            <div className="overview-image">
-                                                <img loading="lazy" src={StacksImg} alt="Diagram representing a solution stack" />
-                                            </div>
-                                        </Column>
                                     </Row>
                                 </Grid>
                             : this.state.curStepIx === STEP_USECASE ?
