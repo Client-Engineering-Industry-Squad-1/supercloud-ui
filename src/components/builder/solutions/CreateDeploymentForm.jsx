@@ -55,6 +55,10 @@ const DeploymentForm = ({solutionId}) => {
   };
 
   const handleSaveDraft = async () => {
+    if (!deploymentName) {
+      alert("Please enter a deployment name.");
+      return;
+    }
     const data = {
       name: deploymentName,
       solution_id: solutionId,
@@ -96,8 +100,8 @@ const DeploymentForm = ({solutionId}) => {
           <Form>
             <TextInput 
               id="deployment-name" 
-              labelText="deployment_name" 
-              required="true"
+              labelText="deployment_name"
+              required
               onChange={handleDeploymentNameChange}
               value={deploymentName}
             />
