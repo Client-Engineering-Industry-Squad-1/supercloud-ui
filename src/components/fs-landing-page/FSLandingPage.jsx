@@ -60,9 +60,6 @@ class FSLandingPage extends Component {
                             <h1 className="landing-page__heading">
                                Controls Catalog
                             </h1>
-                            <h2 className="landing-page__subheading">
-                                IBM Cloud for Financial Services
-                            </h2>
                         </Column>
                         <Column lg={{span: 6}} sm={{span: 12}} className='flex-right'>
 
