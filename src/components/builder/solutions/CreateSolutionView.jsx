@@ -4,7 +4,7 @@ import {
 } from "react-router-dom";
 import {
     TextInput, Column, Grid, Row, Tag, Form, TextArea, Select, SelectItem,
-    Button, ProgressIndicator, ProgressStep
+    Button, ProgressIndicator, ProgressStep, Search
 } from 'carbon-components-react';
 import {
     ContainerSoftware32, Close32 as Close
@@ -66,6 +66,8 @@ class CreateSolutionview extends Component {
             platform: undefined,
             architecture: undefined,
             infrastructure: [],
+            filteredInfraOptions: [],
+            filteredSoftwareOptions: [],
             software: [],
             fields: {
                 id: guid,
@@ -204,9 +206,7 @@ class CreateSolutionview extends Component {
             enabled: this.state.catalog?.boms?.find(bom => bom.category === 'infrastructure' && bom.cloudProvider === platform?.name && bom.flavor === f.name) !== undefined ? true : false
         }));
         const softwareOptions = this.state.catalog?.boms?.filter(bom => bom.category === 'software' && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined));
-        const infraOptions = flavor ? this.state.catalog?.boms?.filter(bom => (bom.category === 'infrastructure' || bom.category === 'storage') && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined) && (bom.flavor === flavor.name || bom.flavor === undefined)) : this.state.catalog?.boms?.filter(bom => (bom.category === 'infrastructure' || bom.category === 'storage') && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined))
-        console.log('infrastructure', infraOptions);
-        console.log('software', softwareOptions)
+        const infraOptions = flavor ? this.state.catalog?.boms?.filter(bom => (bom.category === 'infrastructure' || bom.category === 'storage') && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined) && (bom.flavor === flavor.name || bom.flavor === undefined)) : this.state.catalog?.boms?.filter(bom => (bom.category === 'infrastructure' || bom.category === 'storage') && (bom.cloudProvider === 'multi' || bom.cloudProvider === platform?.name || bom.cloudProvider === undefined));
         const infrastructure = this.state.infrastructure.map(infraId => (this.state.catalog?.boms?.find(infra => infra.name === infraId)));
         const software = this.state.software.map(swId => (this.state.catalog?.boms?.find(sw => sw.name === swId)));
         // TODO: Update the review
@@ -422,12 +422,38 @@ class CreateSolutionview extends Component {
                                                         Dont worry you can edit you solution once its created to refine it so you client or partner is completely happy.
                                                     </div>
                                                     <br />
+                                                    <Search
+                                                        className='infra-search'
+                                                        labelText='Search infrastructure options'
+                                                        id='infra-search'
+                                                        placeHolderText='Search'
+                                                        onChange={(e) => {
+                                                            const searchValue = e.target.value.toLowerCase();
+                                                            const filteredInfraOptions = infraOptions.filter((infra) => {
+                                                                const displayName = infra.displayName ?? infra.name;
+                                                                return displayName.toLowerCase().includes(searchValue);
+                                                            });
+                                                            this.setState({ filteredInfraOptions });
+                                                        }}
+                                                    />
+                                                    <br />
                                                     <StatefulTileCatalog
                                                         title='Infrastructure Bundles'
                                                         id='infrastructure-bundles'
                                                         isMultiSelect
-                                                        tiles= {
-                                                            infraOptions.reverse().map((infrastructure) => ({
+                                                        tiles={
+                                                            (this.state.filteredInfraOptions.length > 0) ?
+                                                            this.state.filteredInfraOptions.map((infrastructure) => ({
+                                                                id: infrastructure.name,
+                                                                values: {
+                                                                    title: infrastructure.name,
+                                                                    logo: infrastructure.iconUrl,
+                                                                    displayName: infrastructure.displayName ?? infrastructure.name,
+                                                                    description: infrastructure.description,
+                                                                },
+                                                                renderContent: tileRenderFunction,
+                                                            })) :
+                                                            infraOptions.map((infrastructure) => ({
                                                                 id: infrastructure.name,
                                                                 values: {
                                                                     title: infrastructure.name,
@@ -466,12 +492,38 @@ class CreateSolutionview extends Component {
                                                 Dont worry you can edit you solution once its created to refine it so you client or partner is completely happy.
                                             </div>
                                             <br />
+                                            <Search
+                                                className='software-search'
+                                                labelText='Search software options'
+                                                id='software-search'
+                                                placeHolderText='Search'
+                                                onChange={(e) => {
+                                                    const searchValue = e.target.value.toLowerCase();
+                                                    const filteredSoftwareOptions = softwareOptions.filter((software) => {
+                                                        const displayName = software.displayName ?? software.name;
+                                                        return displayName.toLowerCase().includes(searchValue);
+                                                    });
+                                                    this.setState({ filteredSoftwareOptions });
+                                                }}
+                                            />
+                                            <br />
                                             <StatefulTileCatalog
                                                 title='Software Bundles'
                                                 id='software-bundles'
                                                 isMultiSelect
-                                                tiles= {
-                                                    softwareOptions.reverse().map((software) => ({
+                                                tiles={
+                                                    (this.state.filteredSoftwareOptions.length > 0) ?
+                                                    this.state.filteredSoftwareOptions.map((software) => ({
+                                                        id: software.name,
+                                                        values: {
+                                                            title: software.name,
+                                                            logo: software.iconUrl,
+                                                            displayName: software.displayName ?? software.name,
+                                                            description: software.description,
+                                                        },
+                                                        renderContent: tileRenderFunction,
+                                                    })) :
+                                                    softwareOptions.map((software) => ({
                                                         id: software.name,
                                                         values: {
                                                             title: software.name,
